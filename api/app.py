@@ -122,7 +122,7 @@ app = FastAPI()
 @app.get('/')
 def hello():
     return{
-        'status':'running'
+        'status':'✅running...'
     }
     
 
@@ -153,22 +153,22 @@ def prediction(data : Agridata):
         }])
             
         #target Encoder  
-        te=joblib.load(r'api\target_encoder_s.pkl')
+        te=joblib.load(r'target_encoder_s.pkl')
         
         #label Encoders   
         cat_cols = ['ph_category', 'rainfall_level']
-        with open(r"api\feature_encoders.pkl","rb") as f:
+        with open(r"feature_encoders.pkl","rb") as f:
             encoders = pickle.load(f)
 
         for col in cat_cols:
             df[col] = encoders[col].transform(df[col])
             
         #Model
-        model = joblib.load(r'api\crop_recommendation_rf_model.pkl')
+        model = joblib.load(r'crop_recommendation_rf_model.pkl')
 
         y  = model.predict(df)[0]
-        print("Y:- ",y)
-        print("Type Y: ",type(y))
+        # print("Y:- ",y)
+        # print("Type Y: ",type(y))
         
         preds = te.inverse_transform([y])[0]
         
